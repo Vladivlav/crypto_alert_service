@@ -1,0 +1,2 @@
+class NotificationLog < ApplicationRecord
+end

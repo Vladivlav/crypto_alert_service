@@ -1,0 +1,35 @@
+require Rails.root.join(
+  "app", "domains", "notification_channels", "builders", "channel_creation"
+)
+
+require "sidekiq/web"
+
+Rails.application.routes.draw do
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "up" => "rails/health#show", as: :rails_health_check
+
+  mount Sidekiq::Web => "/sidekiq"
+
+  namespace :api do
+    namespace :v1 do
+      # Используем константу Builders::ChannelCreation::TYPES
+      post "/channels/:channel_type",
+        to: "channels#create",
+        constraints: { channel_type: /#{NotificationChannels::Builders::ChannelCreation::TYPES.join('|')}/ }
+
+      post "telegram/webhook/:webhook_token", to: "telegram_webhooks#receive", as: :telegram_webhook
+
+      post "price_thresholds", to: "price_thresholds#create"
+    end
+  end
+
+  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
+  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+
+  # Defines the root path route ("/")
+  # root "posts#index"
+end
