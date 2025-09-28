@@ -1,0 +1,2 @@
+class CryptoPair < ApplicationRecord
+end
