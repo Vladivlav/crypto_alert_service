@@ -8,8 +8,8 @@ module NotificationChannels
     let(:invalid_token) { "invalid_token" }
 
     # Моки теперь ожидают токен в методе call
-    let(:valid_validator)    { instance_double(TelegramValidator) }
-    let(:invalid_validator)  { instance_double(TelegramValidator) }
+    let(:valid_validator)    { instance_double(Integrations::Telegram::BotTokenVerifier) }
+    let(:invalid_validator)  { instance_double(Integrations::Telegram::BotTokenVerifier) }
     let(:successful_webhook) { instance_double(Webhooks::Telegram) }
     let(:failed_webhook)     { instance_double(Webhooks::Telegram) }
 

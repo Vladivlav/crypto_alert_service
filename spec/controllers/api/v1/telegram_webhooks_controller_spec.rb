@@ -4,10 +4,10 @@ require 'dry/monads'
 
 RSpec.describe Api::V1::TelegramWebhooksController, type: :controller do
   let(:channel) { create(:notification_channel) }
-  let(:telegram_message_processor) { class_double('TelegramMessageProcessor') }
+  let(:telegram_message_processor) { class_double(Integrations::Telegram::MessageProcessor) }
 
   before do
-    stub_const('TelegramMessageProcessor', telegram_message_processor)
+    stub_const("Integrations::Telegram::MessageProcessor", telegram_message_processor)
     allow(telegram_message_processor).to receive(:call).and_return(Dry::Monads::Success())
     # Мокаем find_by_webhook_token, чтобы не зависеть от реального токена
     allow(NotificationChannel).to receive(:find_by_webhook_token).and_return(channel)

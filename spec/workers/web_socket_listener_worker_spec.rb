@@ -3,8 +3,8 @@ require_relative '../../app/workers/web_socket_listener_worker'
 
 RSpec.describe WebSocketListenerWorker, type: :worker do
   # Мокирование зависимостей для изоляции теста
-  let(:symbol_manager) { instance_double(PriceAlerts::SymbolManager) }
-  let(:streamer) { instance_double(PriceAlerts::Streamer, start: true) }
+  let(:symbol_manager) { instance_double(PriceAlerts::Services::SymbolManager) }
+  let(:streamer) { instance_double(PriceAlerts::Services::Streamer, start: true) }
   let(:logger) { instance_double(ActiveSupport::Logger, warn: nil, info: nil, error: nil) }
 
   before do
@@ -13,10 +13,10 @@ RSpec.describe WebSocketListenerWorker, type: :worker do
     allow(WebSocketListenerWorker).to receive(:perform_in)
 
     # Мокаем SymbolManager
-    allow(PriceAlerts::SymbolManager).to receive(:new).and_return(symbol_manager)
+    allow(PriceAlerts::Services::SymbolManager).to receive(:new).and_return(symbol_manager)
 
     # Мокаем Streamer, чтобы не устанавливать реальное соединение
-    allow(PriceAlerts::Streamer).to receive(:new).and_return(streamer)
+    allow(PriceAlerts::Services::Streamer).to receive(:new).and_return(streamer)
 
     # Мокаем логгер
     allow(Rails).to receive(:logger).and_return(logger)
@@ -32,7 +32,7 @@ RSpec.describe WebSocketListenerWorker, type: :worker do
 
     it 'calls Streamer#start with active symbols' do
       # Проверяем, что стример инициализируется с правильными символами
-      expect(PriceAlerts::Streamer).to receive(:new).with(initial_symbols: symbols).and_return(streamer)
+      expect(PriceAlerts::Services::Streamer).to receive(:new).with(initial_symbols: symbols).and_return(streamer)
 
       # Проверяем, что вызывается блокирующий метод start
       expect(streamer).to receive(:start)

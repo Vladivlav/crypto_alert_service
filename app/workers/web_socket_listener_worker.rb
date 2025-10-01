@@ -8,7 +8,7 @@ class WebSocketListenerWorker
   sidekiq_options queue: :listener, retry: false
 
   def perform
-    active_symbols = PriceAlerts::SymbolManager.new.active_symbols
+    active_symbols = PriceAlerts::Services::SymbolManager.new.active_symbols
 
     if active_symbols.empty?
       Rails.logger.warn "No active symbols found. Rescheduling check for 60 seconds."
@@ -18,7 +18,7 @@ class WebSocketListenerWorker
 
     Rails.logger.info "Starting WebSocket listener for: #{active_symbols.join(', ')}"
 
-    streamer = PriceAlerts::Streamer.new(initial_symbols: active_symbols)
+    streamer = PriceAlerts::Services::Streamer.new(initial_symbols: active_symbols)
     streamer.start
 
     Rails.logger.info "WebSocket connection closed gracefully. Restarting worker."

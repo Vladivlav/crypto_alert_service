@@ -8,7 +8,7 @@ module Api
 
       def create
         form     = PriceThresholds::Contracts::Create.new
-        scenario = PriceThresholds::Create.new
+        scenario = PriceThresholds::Scenarios::Create.new
 
         validate_params!(form.call(price_threshold_params)) do |valid_params|
           check_result!(scenario.call(valid_params)) do

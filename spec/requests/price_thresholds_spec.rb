@@ -8,7 +8,7 @@ RSpec.describe "PriceThresholds", type: :request do
     # Мокируем внешние зависимости сервиса PriceThresholds::Create
     let(:price_threshold_klass) { class_double(PriceThreshold) }
     let(:crypto_pair_klass)     { class_double(CryptoPair) }
-    let(:redis_synchronizer)    { class_double(PriceThresholds::RedisSynchronizer) }
+    let(:redis_synchronizer)    { class_double(PriceThresholds::Services::RedisIncrementalSynchronizer) }
 
     # Параметры, которые будут отправлены
     let(:valid_params_hash) do
@@ -91,7 +91,7 @@ RSpec.describe "PriceThresholds", type: :request do
         json_response = JSON.parse(response.body)
 
         # Проверяем сообщение об ошибке, которое вернет сервис
-        expect(json_response['error']).to eq(PriceThresholds::Create::MAX_LIMIT_ERROR_MSG)
+        expect(json_response['error']).to eq(PriceThresholds::Scenarios::Create::MAX_LIMIT_ERROR_MSG)
       end
     end
   end

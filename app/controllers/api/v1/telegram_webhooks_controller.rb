@@ -7,7 +7,7 @@ class Api::V1::TelegramWebhooksController < ApplicationController
     channel = NotificationChannel.find_by_webhook_token(params[:webhook_token])
 
     if channel
-      TelegramMessageProcessor.call(channel: channel, message: telegram_webhook_params[:message].to_h)
+      Integrations::Telegram::MessageProcessor.call(channel: channel, message: telegram_webhook_params[:message].to_h)
       head :ok
     else
       Rails.logger.warn("Received webhook for an unknown token: #{params[:webhook_token]}")

@@ -5,12 +5,12 @@ RSpec.describe Api::V1::PriceThresholdsController, type: :controller do
   describe "POST create" do
     # Мокируем экземпляры контракта и сценария
     let(:form_double) { instance_double(PriceThresholds::Contracts::Create) }
-    let(:scenario_double) { instance_double(PriceThresholds::Create) }
+    let(:scenario_double) { instance_double(PriceThresholds::Scenarios::Create) }
 
     # Мокируем инициализацию, чтобы всегда возвращать наши двойники
     before do
       allow(PriceThresholds::Contracts::Create).to receive(:new).and_return(form_double)
-      allow(PriceThresholds::Create).to receive(:new).and_return(scenario_double)
+      allow(PriceThresholds::Scenarios::Create).to receive(:new).and_return(scenario_double)
     end
 
     # Общие параметры, которые придут в запросе

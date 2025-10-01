@@ -9,7 +9,7 @@ module NotificationChannels
       include Dry::Monads::Do.for(:call)
 
       def initialize(
-        validator: TelegramValidator.new,
+        validator: Integrations::Telegram::BotTokenVerifier.new,
         webhook_service: Webhooks::Telegram.new,
         channel_model: NotificationChannel
       )

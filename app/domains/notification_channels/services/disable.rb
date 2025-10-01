@@ -9,11 +9,13 @@ module NotificationChannels
 
       def call(channel)
         channel.is_active = false
-        channel.save!
 
-        Success(channel)
-      rescue => e
-        Failure("Can not disable channel, reason: #{e}")
+        if channel.save
+          Success(channel)
+        else
+          error_message = channel.errors.full_messages.join(", ")
+          Failure("Failed to deactivate channel ID #{channel.id}: #{error_message}")
+        end
       end
     end
   end
