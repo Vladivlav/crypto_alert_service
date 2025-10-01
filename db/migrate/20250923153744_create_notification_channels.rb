@@ -7,6 +7,6 @@ class CreateNotificationChannels < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    add_index :notification_channels, :channel_type, unique: true
+    add_index :notification_channels, :channel_type
   end
 end

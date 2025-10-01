@@ -79,3 +79,7 @@ gem "pry", "~> 0.15.2"
 gem "hashids", "~> 1.0.6"
 
 gem "redis", "~> 5.4"
+
+gem "faye-websocket", "~> 0.12.0"
+
+gem "sidekiq", "~> 8.0"

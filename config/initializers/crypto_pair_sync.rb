@@ -7,7 +7,7 @@
 Rails.application.config.after_initialize do
   Rails.logger.info "Starting crypto pair synchronization..."
 
-  result = Binance::PairSyncService.new.call
+  result = Binance::Services::SyncPairs.new.call
 
   if result.failure?
     Rails.logger.info "Failed to synchronize pairs: #{result.failure}"

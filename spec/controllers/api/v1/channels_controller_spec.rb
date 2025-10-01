@@ -4,14 +4,14 @@ require "ostruct"
 
 RSpec.describe Api::V1::ChannelsController, type: :controller do
   describe "POST create" do
-    let(:contract_double) { instance_double(TelegramToken) }
-    let(:service_double) { instance_double(AddTelegramChannel) }
+    let(:contract_double) { instance_double(NotificationChannels::Contracts::Telegram) }
+    let(:service_double) { instance_double(NotificationChannels::Scenarios::CreateTelegramChannel) }
 
     # Мокируем контракт и сервис
     let(:telegram_factory_config) do
       {
         contract: instance_double(Class, new: contract_double),
-        service: instance_double(Class, new: service_double)
+        scenario: instance_double(Class, new: service_double)
       }
     end
 

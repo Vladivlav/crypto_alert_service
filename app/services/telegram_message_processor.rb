@@ -6,8 +6,8 @@ class TelegramMessageProcessor
   include Dry::Monads[:result]
 
   def initialize(
-    activator_service: Telegram::ChannelActivatorService,
-    deactivator_service: Telegram::ChannelDeactivatorService
+    activator_service: NotificationChannels::Services::Telegram::ActivateChannel,
+    deactivator_service: NotificationChannels::Services::Disable.new
   )
     @activator = activator_service
     @deactivator = deactivator_service

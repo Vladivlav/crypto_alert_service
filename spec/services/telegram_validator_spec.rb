@@ -7,7 +7,7 @@ RSpec.describe TelegramValidator, type: :service do
   let(:valid_token) { "123456:ABC-DEF1234ghIkl-789" }
   let(:invalid_token) { "invalid_token" }
 
-  it 'возвращает true для валидного токена' do
+  it 'returns a success with valid token' do
     # Заглушаем HTTP-запрос к Telegram, чтобы имитировать успешный ответ
     stub_request(:get, "https://api.telegram.org/bot#{valid_token}/getMe").
       to_return(status: 200, body: '{"ok":true, "result":{}}', headers: {})
@@ -16,7 +16,7 @@ RSpec.describe TelegramValidator, type: :service do
     expect(service.call(valid_token)).to be_success
   end
 
-  it 'возвращает false для невалидного токена' do
+  it 'returns a failure for invalid token' do
     # Заглушаем HTTP-запрос к Telegram, чтобы имитировать ошибку
     stub_request(:get, "https://api.telegram.org/bot#{invalid_token}/getMe").
       to_return(status: 401, body: '{"ok":false}', headers: {})
@@ -25,7 +25,7 @@ RSpec.describe TelegramValidator, type: :service do
     expect(service.call(invalid_token)).to be_failure
   end
 
-  it 'возвращает false, если сервер вернул ошибку 500' do
+  it 'returns a failure if TG server respond with 500 http code' do
     stub_request(:get, "https://api.telegram.org/bot#{valid_token}/getMe").
       to_return(status: 500)
 
@@ -33,7 +33,7 @@ RSpec.describe TelegramValidator, type: :service do
     expect(service.call(valid_token)).to be_failure
   end
 
-  it 'возвращает false, если ответ сервера не является валидным JSON' do
+  it 'returns a failure if server respond with invalid JSON response' do
     stub_request(:get, "https://api.telegram.org/bot#{valid_token}/getMe").
       to_return(status: 200, body: '{"ok":true, "result":{', headers: {})
 
@@ -41,7 +41,7 @@ RSpec.describe TelegramValidator, type: :service do
     expect(service.call(valid_token)).to be_failure
   end
 
-  it 'возвращает false при ошибке сети (например, таймаут)' do
+  it 'returns a failure on a network error' do
     stub_request(:get, "https://api.telegram.org/bot#{valid_token}/getMe").
       to_raise(Net::ReadTimeout)
 

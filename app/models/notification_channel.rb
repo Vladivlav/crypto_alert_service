@@ -3,12 +3,18 @@
 require "hashids"
 
 class NotificationChannel < ApplicationRecord
+  scope :active, -> { where(is_active: true) }
+
   def webhook_token
     hashids_instance.encode(id)
   end
 
   def chat_id
     config["chat_id"]
+  end
+
+  def bot_token
+    config["bot_token"]
   end
 
   def chat_id=(new_chat_id)

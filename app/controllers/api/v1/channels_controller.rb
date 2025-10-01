@@ -9,7 +9,7 @@ module Api
       def create
         factory_config  = ChannelCreation.for(params[:channel_type])
         contract        = factory_config[:contract].new
-        scenario        = factory_config[:service].new
+        scenario        = factory_config[:scenario].new
 
         validate_params!(contract.call(params[:channel][:config]&.to_unsafe_h)) do |valid_params|
           check_result!(scenario.call(token: valid_params[:token])) do |channel|

@@ -11,4 +11,14 @@ class PriceThreshold < ApplicationRecord
       operator: operator
     }
   end
+
+  def self.from_cache(hash)
+    threshold = self.new
+
+    threshold.id       = hash[:id]
+    threshold.symbol   = hash[:symbol]
+    threshold.value    = BigDecimal(hash[:value].to_s)
+    threshold.operator = hash[:operator]
+    threshold
+  end
 end
